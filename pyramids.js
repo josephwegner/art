@@ -21,7 +21,7 @@ function applyPerspective(x, y) {
 }
 
 function setup() {
-  createCanvas(1500, 1500);
+  createCanvas(800, 800);
   colorMode(HSB, 360, 100, 100);
   noStroke();
   noLoop();

@@ -67,11 +67,8 @@ function drawVisualization() {
 
 		const mainCanvas = cnv.elt;
 		const imgElement = document.createElement('img');
+    const frameElement = document.getElementById('frame');
 		imgElement.src = IMAGE_FILE;
-		imgElement.style.position = 'absolute';
-		imgElement.style.top = '50%';
-		imgElement.style.left = '50%';
-		imgElement.style.transform = 'translate(-50%, -50%)';
 		imgElement.style.width = '800px';
 		imgElement.style.height = '600px';
 		imgElement.style.objectFit = 'cover';
@@ -82,7 +79,7 @@ function drawVisualization() {
 		imgElement.style.filter = "grayscale(100%)";
 
 		mainCanvas.style.display = 'none';
-		mainCanvas.parentElement.appendChild(imgElement);
+		frameElement.appendChild(imgElement);
 
 		currentImgElement = imgElement;
 	}, 100);

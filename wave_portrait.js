@@ -1,22 +1,37 @@
 // Wave portrait that uses waves as a mask over an image
 
-const NUM_WAVES = 1200;
-const ILLUSTRATION_HEIGHT = 1200;
 const IMAGE_FILE = 'ellis.jpeg';
-const STROKE_WEIGHT = 2;
-const STROKE_OPACITY = .5
+
+// Mutable parameters controlled by sliders
+let NUM_WAVES = 600;
+let ILLUSTRATION_HEIGHT = 1200;
+let STROKE_WEIGHT = 1.5;
+let STROKE_OPACITY = 0.4;
 
 let img;
+let cnv;
+let currentImgElement = null;
 
 function preload() {
 	img = loadImage(IMAGE_FILE);
 }
 
 function setup() {
-	const cnv = createCanvas(800, 600);
+	cnv = createCanvas(800, 600);
+	noLoop();
 
-	clear(); // Transparent background instead of white
-	stroke(0, 0, 0, STROKE_OPACITY * 100);
+	// Initialize sliders
+	setupSliders();
+
+	// Draw initial visualization
+	drawVisualization();
+}
+
+function drawVisualization() {
+	// Clear canvas
+	clear();
+
+	stroke(0, 0, 0, STROKE_OPACITY * 255);
 	strokeWeight(STROKE_WEIGHT);
 	strokeCap(ROUND);
 	noFill();
@@ -45,12 +60,18 @@ function setup() {
 
 	// Apply CSS mask after canvas is ready
 	setTimeout(() => {
-		const mainCanvas = cnv.elt; // Get the native canvas element from p5
+		// Remove previous image element if it exists
+		if (currentImgElement) {
+			currentImgElement.remove();
+		}
+
+		const mainCanvas = cnv.elt;
 		const imgElement = document.createElement('img');
 		imgElement.src = IMAGE_FILE;
 		imgElement.style.position = 'absolute';
-		imgElement.style.top = '0';
-		imgElement.style.left = '0';
+		imgElement.style.top = '50%';
+		imgElement.style.left = '50%';
+		imgElement.style.transform = 'translate(-50%, -50%)';
 		imgElement.style.width = '800px';
 		imgElement.style.height = '600px';
 		imgElement.style.objectFit = 'cover';
@@ -58,11 +79,56 @@ function setup() {
 		imgElement.style.maskImage = `url(${mainCanvas.toDataURL()})`;
 		imgElement.style.webkitMaskSize = '100% 100%';
 		imgElement.style.maskSize = '100% 100%';
-    imgElement.style.filter = "grayscale(100%)";
+		imgElement.style.filter = "grayscale(100%)";
 
 		mainCanvas.style.display = 'none';
 		mainCanvas.parentElement.appendChild(imgElement);
-	}, 100);
 
-	noLoop();
+		currentImgElement = imgElement;
+	}, 100);
+}
+
+function setupSliders() {
+	// Number of Waves
+	const numWavesSlider = document.getElementById('numWaves');
+	const numWavesValue = document.getElementById('numWavesValue');
+	numWavesSlider.addEventListener('input', (e) => {
+		NUM_WAVES = parseInt(e.target.value);
+		numWavesValue.textContent = NUM_WAVES;
+		drawVisualization();
+	});
+
+	// Illustration Height
+	const illustrationHeightSlider = document.getElementById('illustrationHeight');
+	const illustrationHeightValue = document.getElementById('illustrationHeightValue');
+	illustrationHeightSlider.value = ILLUSTRATION_HEIGHT;
+	illustrationHeightValue.textContent = ILLUSTRATION_HEIGHT;
+	illustrationHeightSlider.addEventListener('input', (e) => {
+		ILLUSTRATION_HEIGHT = parseInt(e.target.value);
+		illustrationHeightValue.textContent = ILLUSTRATION_HEIGHT;
+		drawVisualization();
+	});
+
+	// Stroke Weight
+	const strokeWeightSlider = document.getElementById('strokeWeight');
+	const strokeWeightValue = document.getElementById('strokeWeightValue');
+	strokeWeightSlider.addEventListener('input', (e) => {
+		STROKE_WEIGHT = parseFloat(e.target.value);
+		strokeWeightValue.textContent = STROKE_WEIGHT;
+		drawVisualization();
+	});
+
+	// Stroke Opacity
+	const strokeOpacitySlider = document.getElementById('strokeOpacity');
+	const strokeOpacityValue = document.getElementById('strokeOpacityValue');
+	strokeOpacitySlider.min = "0.1";
+	strokeOpacitySlider.max = "1";
+	strokeOpacitySlider.step = "0.1";
+	strokeOpacitySlider.value = STROKE_OPACITY;
+	strokeOpacityValue.textContent = STROKE_OPACITY;
+	strokeOpacitySlider.addEventListener('input', (e) => {
+		STROKE_OPACITY = parseFloat(e.target.value);
+		strokeOpacityValue.textContent = STROKE_OPACITY.toFixed(1);
+		drawVisualization();
+	});
 }

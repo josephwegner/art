@@ -1,10 +1,10 @@
 // Wave portrait that uses waves as a mask over an image
 
-const NUM_WAVES = 1800;
+const NUM_WAVES = 1200;
 const ILLUSTRATION_HEIGHT = 1200;
 const IMAGE_FILE = 'ellis.jpeg';
-const STROKE_WEIGHT = 3;
-const STROKE_OPACITY = .3
+const STROKE_WEIGHT = 2;
+const STROKE_OPACITY = .5
 
 let img;
 

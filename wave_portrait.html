@@ -125,6 +125,32 @@
     #frame {
 
     }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      main {
+        padding: 20px 10px;
+      }
+
+      #controls {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px;
+      }
+
+      #controls h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+
+      .control-group {
+        margin-bottom: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -138,14 +164,6 @@
         <span class="value" id="numWavesValue">600</span>
       </label>
       <input type="range" id="numWaves" min="100" max="2000" value="600" step="100">
-    </div>
-
-    <div class="control-group">
-      <label>
-        Illustration Height
-        <span class="value" id="illustrationHeightValue">1200</span>
-      </label>
-      <input type="range" id="illustrationHeight" min="200" max="1500" value="1200" step="50">
     </div>
 
     <div class="control-group">

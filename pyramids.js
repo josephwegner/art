@@ -2,13 +2,24 @@
 
 let pyramids = [];
 
+function calculateCanvasSize() {
+  let size = min(windowWidth - 40, windowHeight - 40);
+  if (windowWidth > 768) {
+    size = min(600, size);
+  } else {
+    size = min(windowWidth * 0.9, windowHeight * 0.6);
+  }
+  return size;
+}
+
 // Perspective settings
 const perspectiveFactor = -0.0005; // How strong the perspective effect is
-const vanishingX = 400; // X position of vanishing point
-const vanishingY = 200; // Y position of vanishing point (horizon line)
 
 // Apply perspective transformation to a point
 function applyPerspective(x, y) {
+  let vanishingX = width / 2; // X position of vanishing point
+  let vanishingY = height / 4; // Y position of vanishing point (horizon line)
+
   // Use y as depth - higher y = further away
   let depth = y - vanishingY;
   let scale = 1 / (1 + depth * perspectiveFactor);
@@ -21,7 +32,8 @@ function applyPerspective(x, y) {
 }
 
 function setup() {
-  createCanvas(800, 800);
+  let size = calculateCanvasSize();
+  createCanvas(size, size);
   colorMode(HSB, 360, 100, 100);
   noStroke();
   noLoop();
@@ -114,4 +126,11 @@ function drawPyramid(x, y, width, height, hue) {
 
 function draw() {
   // Drawing happens in setup
+}
+
+function windowResized() {
+  pyramids = [];
+  let size = calculateCanvasSize();
+  resizeCanvas(size, size);
+  setup();
 }

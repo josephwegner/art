@@ -39,6 +39,24 @@
       border-left: 1px solid rgba(255, 255, 255, 0.1);
     }
 
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      main {
+        padding: 20px 10px;
+      }
+
+      #controls {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px;
+      }
+
+    }
+
     #controls h2 {
       margin-top: 0;
       margin-bottom: 20px;
@@ -115,13 +133,6 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
       border-radius: 4px;
       overflow: hidden;
-      max-width: 600px;
-      max-height: 600px;
-    }
-
-    #frame canvas {
-      width: 100% !important;
-      height: 100% !important;
     }
   </style>
 </head>

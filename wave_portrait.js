@@ -4,7 +4,6 @@ const IMAGE_FILE = 'ellis.jpeg';
 
 // Mutable parameters controlled by sliders
 let NUM_WAVES = 600;
-let ILLUSTRATION_HEIGHT = 1200;
 let STROKE_WEIGHT = 1.5;
 let STROKE_OPACITY = 0.4;
 
@@ -12,12 +11,25 @@ let img;
 let cnv;
 let currentImgElement = null;
 
+function calculateCanvasSize() {
+  let w, h;
+  if (windowWidth > 768) {
+    w = min(800, windowWidth - 360);
+    h = w * 0.75; // 4:3 aspect ratio
+  } else {
+    w = windowWidth * 0.9;
+    h = w * 0.75;
+  }
+  return { width: w, height: h };
+}
+
 function preload() {
 	img = loadImage(IMAGE_FILE);
 }
 
 function setup() {
-	cnv = createCanvas(800, 600);
+	let size = calculateCanvasSize();
+	cnv = createCanvas(size.width, size.height);
 	noLoop();
 
 	// Initialize sliders
@@ -41,10 +53,11 @@ function drawVisualization() {
 	const minY = -100;
 	const maxY = 0.1 * (NUM_WAVES - 1) + 100;
 
-	// Center the illustration vertically using ILLUSTRATION_HEIGHT
+	// Center the illustration vertically using canvas height
 	const centerY = height / 2;
-	const targetMinY = centerY - ILLUSTRATION_HEIGHT / 2;
-	const targetMaxY = centerY + ILLUSTRATION_HEIGHT / 2;
+	const illustrationHeight = height * 2;
+	const targetMinY = centerY - illustrationHeight / 2;
+	const targetMaxY = centerY + illustrationHeight / 2;
 
 	// Draw waves
 	for (let i = 0; i < NUM_WAVES; i++) {
@@ -69,8 +82,8 @@ function drawVisualization() {
 		const imgElement = document.createElement('img');
     const frameElement = document.getElementById('frame');
 		imgElement.src = IMAGE_FILE;
-		imgElement.style.width = '800px';
-		imgElement.style.height = '600px';
+		imgElement.style.width = width + 'px';
+		imgElement.style.height = height + 'px';
 		imgElement.style.objectFit = 'cover';
 		imgElement.style.webkitMaskImage = `url(${mainCanvas.toDataURL()})`;
 		imgElement.style.maskImage = `url(${mainCanvas.toDataURL()})`;
@@ -92,17 +105,6 @@ function setupSliders() {
 	numWavesSlider.addEventListener('input', (e) => {
 		NUM_WAVES = parseInt(e.target.value);
 		numWavesValue.textContent = NUM_WAVES;
-		drawVisualization();
-	});
-
-	// Illustration Height
-	const illustrationHeightSlider = document.getElementById('illustrationHeight');
-	const illustrationHeightValue = document.getElementById('illustrationHeightValue');
-	illustrationHeightSlider.value = ILLUSTRATION_HEIGHT;
-	illustrationHeightValue.textContent = ILLUSTRATION_HEIGHT;
-	illustrationHeightSlider.addEventListener('input', (e) => {
-		ILLUSTRATION_HEIGHT = parseInt(e.target.value);
-		illustrationHeightValue.textContent = ILLUSTRATION_HEIGHT;
 		drawVisualization();
 	});
 
@@ -128,4 +130,10 @@ function setupSliders() {
 		strokeOpacityValue.textContent = STROKE_OPACITY.toFixed(1);
 		drawVisualization();
 	});
+}
+
+function windowResized() {
+	let size = calculateCanvasSize();
+	resizeCanvas(size.width, size.height);
+	drawVisualization();
 }
